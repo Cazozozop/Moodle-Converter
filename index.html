@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertisseur Base64</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen transition-colors duration-300" id="body">
+    <div class="absolute top-4 right-4">
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full animate-fadeIn" id="container">
+        <h2 class="text-2xl font-bold mb-4">Convertisseur Base64</h2>
+        <input type="file" id="fileInput" class="block w-full mb-4 bg-gray-700 p-2 rounded" accept="image/*,video/*,audio/*">
+        <textarea id="output" class="w-full h-40 bg-gray-700 p-2 rounded" readonly></textarea>
+        <button id="copyBtn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Copier</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+            const copyBtn = document.getElementById('copyBtn');
+            const body = document.getElementById('body');
+            const container = document.getElementById('container');
+            const themeToggle = document.getElementById('themeToggle');
+
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result;
+                    output.value = base64;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            copyBtn.addEventListener('click', function() {
+                output.select();
+                navigator.clipboard.writeText(output.value).then(() => {
+                    alert('Code copié !');
+                });
+            });
+
+            themeToggle.addEventListener('click', function() {
+                if (body.classList.contains('bg-gray-900')) {
+                    body.classList.replace('bg-gray-900', 'bg-white');
+                    body.classList.replace('text-white', 'text-gray-900');
+                    container.classList.replace('bg-gray-800', 'bg-gray-200');
+                    themeToggle.textContent = '☀️';
+                } else {
+                    body.classList.replace('bg-white', 'bg-gray-900');
+                    body.classList.replace('text-gray-900', 'text-white');
+                    container.classList.replace('bg-gray-200', 'bg-gray-800');
+                    themeToggle.textContent = '🌙';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
