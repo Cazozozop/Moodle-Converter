@@ -40,7 +40,9 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const base64 = e.target.result;
-                    output.value = base64;
+                    // Générer la balise <img> avec le Base64
+                    const imgTag = `<img src="${base64}" />`;
+                    output.value = imgTag;
                 };
                 reader.readAsDataURL(file);
             });
