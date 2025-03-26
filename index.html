@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertisseur de Lien Média</title>
+    <title>Convertisseur de Balise Média</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
@@ -18,7 +18,7 @@
         <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
     </div>
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full animate-fadeIn" id="container">
-        <h2 class="text-2xl font-bold mb-4">Convertisseur de Lien Média</h2>
+        <h2 class="text-2xl font-bold mb-4">Convertisseur de Balise Média</h2>
         <input type="file" id="fileInput" class="block w-full mb-4 bg-gray-700 p-2 rounded" accept="image/*,video/*,audio/*">
         <textarea id="output" class="w-full h-40 bg-gray-700 p-2 rounded" readonly></textarea>
         <button id="copyBtn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Copier</button>
@@ -37,19 +37,27 @@
                 const file = event.target.files[0];
                 if (!file) return;
                 
-                // Crée une URL pour le fichier téléchargé
+                // Créer une URL pour le fichier téléchargé
                 const url = URL.createObjectURL(file);
-                
-                // Générer le lien direct à insérer dans Moodle
-                const mediaLink = `<a href="${url}" target="_blank">${file.name}</a>`;
-                
-                output.value = mediaLink; // Affiche le lien dans la zone de texte
+
+                // Déterminer le type de média et générer la balise correspondante
+                let mediaTag = '';
+
+                if (file.type.startsWith('image')) {
+                    mediaTag = `<img src="${url}" alt="${file.name}" />`;  // Balise <img> pour les images
+                } else if (file.type.startsWith('video')) {
+                    mediaTag = `<video controls><source src="${url}" type="${file.type}"></video>`;  // Balise <video> pour les vidéos
+                } else if (file.type.startsWith('audio')) {
+                    mediaTag = `<audio controls><source src="${url}" type="${file.type}"></audio>`;  // Balise <audio> pour les audios
+                }
+
+                output.value = mediaTag; // Affiche la balise dans la zone de texte
             });
 
             copyBtn.addEventListener('click', function() {
                 output.select();
                 navigator.clipboard.writeText(output.value).then(() => {
-                    alert('Lien copié !');
+                    alert('Balise copiée !');
                 });
             });
 
