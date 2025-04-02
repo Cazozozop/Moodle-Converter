@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertisseur de Balise Média</title>
+    <title>Outils de Balises</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -13,67 +14,78 @@
         .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen transition-colors duration-300" id="body">
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
     <div class="absolute top-4 right-4">
         <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
     </div>
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full animate-fadeIn" id="container">
-        <h2 class="text-2xl font-bold mb-4">Convertisseur de Balise Média</h2>
-        <input type="file" id="fileInput" class="block w-full mb-4 bg-gray-700 p-2 rounded" accept="image/*,video/*,audio/*">
-        <textarea id="output" class="w-full h-40 bg-gray-700 p-2 rounded" readonly></textarea>
-        <button id="copyBtn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Copier</button>
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
+        <h2 class="text-2xl font-bold mb-4">Convertisseur de Balises</h2>
+        
+        <!-- Section URL vers Balise Image -->
+        <div class="mb-6">
+            <label class="block mb-2">Entrez l'URL d'une image :</label>
+            <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
+            <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
+            <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
+        
+        <!-- Section Texte Cliquable -->
+        <div class="mb-6">
+            <label class="block mb-2">Texte Cliquable :</label>
+            <input type="text" id="linkText" class="block w-full bg-gray-700 p-2 rounded" placeholder="Texte affiché">
+            <input type="text" id="linkUrl" class="block w-full bg-gray-700 p-2 rounded mt-2" placeholder="https://example.com">
+            <button id="generateLinkTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Lien</button>
+            <textarea id="linkTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
+        
+        <!-- Editeur de Texte Riche -->
+        <div class="mb-6">
+            <label class="block mb-2">Éditeur de Texte :</label>
+            <textarea id="textEditor"></textarea>
+            <button id="generateHtmlTag" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Générer Code HTML</button>
+            <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
     </div>
-
+    
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const fileInput = document.getElementById('fileInput');
-            const output = document.getElementById('output');
-            const copyBtn = document.getElementById('copyBtn');
-            const body = document.getElementById('body');
-            const container = document.getElementById('container');
-            const themeToggle = document.getElementById('themeToggle');
+        document.getElementById('generateImageTag').addEventListener('click', function() {
+            const url = document.getElementById('imageUrl').value;
+            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
+        });
+        
+        document.getElementById('generateLinkTag').addEventListener('click', function() {
+            const text = document.getElementById('linkText').value;
+            const url = document.getElementById('linkUrl').value;
+            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
+        });
+        
+        // Mode sombre/clair
+        const body = document.getElementById('body');
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            if (body.classList.contains('bg-gray-900')) {
+                body.classList.replace('bg-gray-900', 'bg-white');
+                body.classList.replace('text-white', 'text-gray-900');
+                this.textContent = '☀️';
+            } else {
+                body.classList.replace('bg-white', 'bg-gray-900');
+                body.classList.replace('text-gray-900', 'text-white');
+                this.textContent = '🌙';
+            }
+        });
+        
+        // Initialisation de l'éditeur de texte
+        tinymce.init({
+            selector: '#textEditor',
+            menubar: false,
+            toolbar: 'undo redo | bold italic underline | forecolor backcolor | fontsize | removeformat',
+            skin: 'oxide-dark',
+            content_css: 'dark'
+        });
 
-            fileInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                
-                // Créer une URL pour le fichier téléchargé
-                const url = URL.createObjectURL(file);
-
-                // Déterminer le type de média et générer la balise correspondante
-                let mediaTag = '';
-
-                if (file.type.startsWith('image')) {
-                    mediaTag = `<img src="${url}" alt="${file.name}" />`;  // Balise <img> pour les images
-                } else if (file.type.startsWith('video')) {
-                    mediaTag = `<video controls><source src="${url}" type="${file.type}"></video>`;  // Balise <video> pour les vidéos
-                } else if (file.type.startsWith('audio')) {
-                    mediaTag = `<audio controls><source src="${url}" type="${file.type}"></audio>`;  // Balise <audio> pour les audios
-                }
-
-                output.value = mediaTag; // Affiche la balise dans la zone de texte
-            });
-
-            copyBtn.addEventListener('click', function() {
-                output.select();
-                navigator.clipboard.writeText(output.value).then(() => {
-                    alert('Balise copiée !');
-                });
-            });
-
-            themeToggle.addEventListener('click', function() {
-                if (body.classList.contains('bg-gray-900')) {
-                    body.classList.replace('bg-gray-900', 'bg-white');
-                    body.classList.replace('text-white', 'text-gray-900');
-                    container.classList.replace('bg-gray-800', 'bg-gray-200');
-                    themeToggle.textContent = '☀️';
-                } else {
-                    body.classList.replace('bg-white', 'bg-gray-900');
-                    body.classList.replace('text-gray-900', 'text-white');
-                    container.classList.replace('bg-gray-200', 'bg-gray-800');
-                    themeToggle.textContent = '🌙';
-                }
-            });
+        document.getElementById('generateHtmlTag').addEventListener('click', function() {
+            const content = tinymce.get('textEditor').getContent();
+            document.getElementById('htmlTagOutput').value = content;
         });
     </script>
 </body>
