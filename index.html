@@ -23,12 +23,23 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
-    <div class="absolute top-4 right-4">
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
+    <div class="absolute top-4 right-4 flex items-center">
+        <!-- Lune / Soleil -->
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded mr-4">
+            <i id="themeIcon" class="fas fa-sun"></i> <!-- Icône soleil initiale -->
+        </button>
     </div>
     
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn container-dark" id="container">
         <h2 class="text-2xl font-bold mb-4">Moodle Tools</h2>
+        
+        <!-- Section YouTube Video Converter -->
+        <div class="mb-6">
+            <label class="block mb-2">Entrez l'URL d'une vidéo YouTube :</label>
+            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://youtube.com/video-id">
+            <button id="generateYouTubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
+            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
         
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
@@ -73,18 +84,31 @@
     </div>
     
     <script>
+        // Fonction YouTube : extrait l'ID de la vidéo et génère la balise
+        document.getElementById('generateYouTubeTag').addEventListener('click', function() {
+            const url = document.getElementById('youtubeUrl').value;
+            const videoId = url.split('v=')[1]?.split('&')[0];  // Extraire l'ID de la vidéo
+            if (videoId) {
+                document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="280",height="152",id="${videoId}"}`;
+            } else {
+                alert('URL YouTube invalide');
+            }
+        });
+        
+        // Fonction Image
         document.getElementById('generateImageTag').addEventListener('click', function() {
             const url = document.getElementById('imageUrl').value;
             document.getElementById('imageTagOutput').value = `<img src="${url}">`;
         });
         
+        // Fonction Lien
         document.getElementById('generateLinkTag').addEventListener('click', function() {
             const text = document.getElementById('linkText').value;
             const url = document.getElementById('linkUrl').value;
             document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
         });
         
-        // Mode sombre/clair
+        // Mode sombre/clair sans emojis
         const body = document.getElementById('body');
         const container = document.getElementById('container');
         document.getElementById('themeToggle').addEventListener('click', function() {
@@ -92,12 +116,14 @@
                 body.classList.replace('bg-gray-900', 'bg-white');
                 body.classList.replace('text-white', 'text-gray-900');
                 container.classList.replace('container-dark', 'container-light');
-                this.textContent = '☀️';
+                this.textContent = 'Mode Clair';
+                document.getElementById('themeIcon').classList.replace('fa-sun', 'fa-moon'); // Icône lune en mode clair
             } else {
                 body.classList.replace('bg-white', 'bg-gray-900');
                 body.classList.replace('text-gray-900', 'text-white');
                 container.classList.replace('container-light', 'container-dark');
-                this.textContent = '🌙';
+                this.textContent = 'Mode Sombre';
+                document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun'); // Icône soleil en mode sombre
             }
         });
         
@@ -111,12 +137,7 @@
             content_css: 'dark'
         });
 
-        document.getElementById('generateHtmlTag').addEventListener('click', function() {
-            const content = tinymce.get('textEditor').getContent();
-            document.getElementById('htmlTagOutput').value = content;
-        });
-
-        // Insérer l'icône FontAwesome dans l'éditeur de texte
+        // Fonction pour insérer des icônes FontAwesome dans l'éditeur
         document.getElementById('insertIcon').addEventListener('click', function() {
             const iconClass = document.getElementById('fontAwesomeIcon').value;
             const iconHtml = `<i class="fa ${iconClass}"></i>`;
