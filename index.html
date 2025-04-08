@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outils de Balises</title>
+    <title>Moodle Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -21,7 +21,15 @@
     </div>
     
     <div class="bg-blue-900 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn" id="converterContainer">
-        <h2 class="text-2xl font-bold mb-4">Convertisseur de Balises</h2>
+        <h2 class="text-2xl font-bold mb-4">Moodle Tools</h2>
+        
+        <!-- Convertisseur YouTube -->
+        <div class="mb-6">
+            <label class="block mb-2">Entrez l'ID YouTube (dernières lettres après "v="):</label>
+            <input type="text" id="youtubeId" class="block w-full bg-gray-700 p-2 rounded" placeholder="ID de la vidéo YouTube">
+            <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
+            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
         
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
@@ -51,24 +59,22 @@
         <!-- Icônes FontAwesome -->
         <div class="mb-6">
             <label class="block mb-2">Icônes FontAwesome :</label>
-            <input type="text" id="iconInput" class="block w-full bg-gray-700 p-2 rounded" placeholder="Entrez une icône (ex: fa-facebook)">
+            <select id="iconSelect" class="block w-full bg-gray-700 p-2 rounded">
+                <option value="fa-cog">Cog</option>
+                <option value="fa-info-circle">Info</option>
+                <option value="fa-exclamation-triangle">Warning</option>
+                <option value="fa-facebook">Facebook</option>
+                <option value="fa-youtube">YouTube</option>
+                <option value="fa-reddit">Reddit</option>
+                <option value="fa-square">Square</option>
+                <option value="fa-discord">Discord</option>
+            </select>
             <button id="insertIcon" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Insérer Icône</button>
             <textarea id="iconOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
     </div>
     
     <script>
-        document.getElementById('generateImageTag').addEventListener('click', function() {
-            const url = document.getElementById('imageUrl').value;
-            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
-        });
-        
-        document.getElementById('generateLinkTag').addEventListener('click', function() {
-            const text = document.getElementById('linkText').value;
-            const url = document.getElementById('linkUrl').value;
-            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
-        });
-        
         // Mode sombre/clair
         const body = document.getElementById('body');
         const converterContainer = document.getElementById('converterContainer');
@@ -86,7 +92,26 @@
             }
         });
         
-        // Initialisation de l'éditeur de texte
+        // Convertisseur YouTube
+        document.getElementById('generateYoutubeTag').addEventListener('click', function() {
+            const id = document.getElementById('youtubeId').value;
+            document.getElementById('youtubeTagOutput').value = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        });
+        
+        // Convertisseur Image
+        document.getElementById('generateImageTag').addEventListener('click', function() {
+            const url = document.getElementById('imageUrl').value;
+            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
+        });
+        
+        // Convertisseur Lien
+        document.getElementById('generateLinkTag').addEventListener('click', function() {
+            const text = document.getElementById('linkText').value;
+            const url = document.getElementById('linkUrl').value;
+            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
+        });
+        
+        // Editeur de Texte Riche
         tinymce.init({
             selector: '#textEditor',
             menubar: false,
@@ -101,10 +126,10 @@
             document.getElementById('htmlTagOutput').value = content;
         });
 
-        // Gestion des icônes FontAwesome
+        // Sélection et insertion d'icônes FontAwesome
         document.getElementById('insertIcon').addEventListener('click', function() {
-            const icon = document.getElementById('iconInput').value;
-            document.getElementById('iconOutput').value = `<i class="fa ${icon}"></i>`;
+            const selectedIcon = document.getElementById('iconSelect').value;
+            document.getElementById('iconOutput').value = `{GENERICO:type="fontawesome",icon="${selectedIcon}",orientation="fa-rotate-0",size="fa-lg",layout="pull-left"}`;
         });
     </script>
 </body>
