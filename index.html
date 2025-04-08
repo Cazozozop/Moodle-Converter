@@ -53,7 +53,14 @@
             <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
     </div>
-    
+    <!-- Générateur de Vidéo YouTube -->
+<div class="mb-6">
+    <label class="block mb-2">Lien YouTube :</label>
+    <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://www.youtube.com/watch?v=xxxxxx ou /shorts/xxxxx">
+    <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise Vidéo</button>
+    <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+</div>
+
     <script>
         document.getElementById('generateImageTag').addEventListener('click', function() {
             const url = document.getElementById('imageUrl').value;
