@@ -4,25 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outils de Balises</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+
+        /* Ajout du changement de couleur pour le container en mode clair */
+        .container-dark {
+            background-color: #2d3748; /* bleu foncé */
+        }
+        .container-light {
+            background-color: #e2e8f0; /* bleu clair */
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
     <div class="absolute top-4 right-4">
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded flex items-center">
+            <i id="themeIcon" class="fas fa-moon"></i> <!-- Icône lune -->
+        </button>
     </div>
-
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn container-dark" id="container">
         <h2 class="text-2xl font-bold mb-4">Convertisseur de Balises</h2>
-
+        
+        <!-- Section YouTube Video Converter -->
+        <div class="mb-6">
+            <label class="block mb-2">Entrez un lien YouTube :</label>
+            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://youtube.com/watch?v=ID">
+            <button id="generateYouTubeTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
+            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
+        
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
             <label class="block mb-2">Entrez l'URL d'une image :</label>
@@ -30,7 +48,7 @@
             <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
             <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
-
+        
         <!-- Section Texte Cliquable -->
         <div class="mb-6">
             <label class="block mb-2">Texte Cliquable :</label>
@@ -39,7 +57,7 @@
             <button id="generateLinkTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Lien</button>
             <textarea id="linkTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
-
+        
         <!-- Editeur de Texte Riche -->
         <div class="mb-6">
             <label class="block mb-2">Éditeur de Texte :</label>
@@ -47,46 +65,43 @@
             <button id="generateHtmlTag" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Générer Code HTML</button>
             <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
-
-        <!-- Générateur de vidéo YouTube -->
-        <div class="mb-6">
-            <label class="block mb-2">Lien vidéo YouTube :</label>
-            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://www.youtube.com/watch?v=ID">
-            <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Code YouTube</button>
-            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
     </div>
-
+    
     <script>
+        // Fonction pour générer la balise YouTube
+        document.getElementById('generateYouTubeTag').addEventListener('click', function() {
+            const youtubeUrl = document.getElementById('youtubeUrl').value;
+            const youtubeId = youtubeUrl.split('v=')[1].split('&')[0];
+            const width = youtubeUrl.includes("shorts") ? "152" : "280";
+            const height = youtubeUrl.includes("shorts") ? "280" : "152";
+            document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${youtubeId}"}`;
+        });
+
+        // Mode sombre/clair
         const body = document.getElementById('body');
+        const container = document.getElementById('container');
         document.getElementById('themeToggle').addEventListener('click', function() {
             if (body.classList.contains('bg-gray-900')) {
                 body.classList.replace('bg-gray-900', 'bg-white');
                 body.classList.replace('text-white', 'text-gray-900');
+                container.classList.replace('container-dark', 'container-light');
                 this.textContent = '☀️';
+                document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun'); // Remplacer l'icône de la lune par le soleil
             } else {
                 body.classList.replace('bg-white', 'bg-gray-900');
                 body.classList.replace('text-gray-900', 'text-white');
+                container.classList.replace('container-light', 'container-dark');
                 this.textContent = '🌙';
+                document.getElementById('themeIcon').classList.replace('fa-sun', 'fa-moon'); // Remplacer l'icône du soleil par la lune
             }
         });
-
-        document.getElementById('generateImageTag').addEventListener('click', function() {
-            const url = document.getElementById('imageUrl').value;
-            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
-        });
-
-        document.getElementById('generateLinkTag').addEventListener('click', function() {
-            const text = document.getElementById('linkText').value;
-            const url = document.getElementById('linkUrl').value;
-            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
-        });
-
+        
+        // Initialisation de l'éditeur de texte
         tinymce.init({
             selector: '#textEditor',
             menubar: false,
             toolbar: 'undo redo | bold italic underline | forecolor backcolor | fontsize | removeformat',
-            plugins: 'lists link',
+            plugins: 'textcolor',
             skin: 'oxide-dark',
             content_css: 'dark'
         });
@@ -94,20 +109,6 @@
         document.getElementById('generateHtmlTag').addEventListener('click', function() {
             const content = tinymce.get('textEditor').getContent();
             document.getElementById('htmlTagOutput').value = content;
-        });
-
-        document.getElementById('generateYoutubeTag').addEventListener('click', function() {
-            const url = document.getElementById('youtubeUrl').value;
-            const match = url.match(/[?&]v=([^&#]+)/) || url.match(/youtu\.be\/([^?&#]+)/);
-            const id = match ? match[1] : '';
-            const isShort = url.includes('shorts/');
-            const width = isShort ? 152 : 280;
-            const height = isShort ? 280 : 152;
-            if (id) {
-                document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${id}"}`;
-            } else {
-                document.getElementById('youtubeTagOutput').value = 'Lien YouTube invalide';
-            }
         });
     </script>
 </body>
