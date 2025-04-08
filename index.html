@@ -3,134 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodle Tools</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
+    <title>Générateur et Mode Sombre/Clair</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e2e2e;
+            color: white;
+            margin: 0;
+            padding: 0;
         }
-        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+        .container {
+            margin: 20px;
+        }
+        .darkmode {
+            background-color: #333;
+            color: white;
+        }
+        .lightmode {
+            background-color: #f0f0f0;
+            color: black;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        #youtubeTagOutput {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #2e2e2e;
+            color: white;
+            border: none;
+        }
+        .icon-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .icon-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
-    <div class="absolute top-4 right-4">
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
-    </div>
-    
-    <div class="bg-blue-900 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn" id="converterContainer">
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools</h2>
+<body class="darkmode">
+    <div class="container">
+        <!-- Mode Sombre/Clair -->
+        <button id="modeSwitch" class="icon-button">
+            <i id="modeIcon" class="fas fa-moon"></i>
+        </button>
         
-        <!-- Convertisseur YouTube -->
+        <!-- Générateur YouTube -->
         <div class="mb-6">
-            <label class="block mb-2">Entrez l'ID YouTube (dernières lettres après "v="):</label>
-            <input type="text" id="youtubeId" class="block w-full bg-gray-700 p-2 rounded" placeholder="ID de la vidéo YouTube">
-            <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
+            <label class="block mb-2">Lien YouTube :</label>
+            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://www.youtube.com/watch?v=xxxxxx ou /shorts/xxxxx">
+            <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise Vidéo</button>
             <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
         
-        <!-- Section URL vers Balise Image -->
+        <!-- Générateur d'icônes FontAwesome -->
         <div class="mb-6">
-            <label class="block mb-2">Entrez l'URL d'une image :</label>
-            <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
-            <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
-            <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
-        
-        <!-- Section Texte Cliquable -->
-        <div class="mb-6">
-            <label class="block mb-2">Texte Cliquable :</label>
-            <input type="text" id="linkText" class="block w-full bg-gray-700 p-2 rounded" placeholder="Texte affiché">
-            <input type="text" id="linkUrl" class="block w-full bg-gray-700 p-2 rounded mt-2" placeholder="https://example.com">
-            <button id="generateLinkTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Lien</button>
-            <textarea id="linkTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
-        
-        <!-- Editeur de Texte Riche -->
-        <div class="mb-6">
-            <label class="block mb-2">Éditeur de Texte :</label>
-            <textarea id="textEditor"></textarea>
-            <button id="generateHtmlTag" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Générer Code HTML</button>
-            <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
-        
-        <!-- Icônes FontAwesome -->
-        <div class="mb-6">
-            <label class="block mb-2">Icônes FontAwesome :</label>
-            <select id="iconSelect" class="block w-full bg-gray-700 p-2 rounded">
-                <option value="fa-cog">Cog</option>
-                <option value="fa-info-circle">Info</option>
-                <option value="fa-exclamation-triangle">Warning</option>
-                <option value="fa-facebook">Facebook</option>
-                <option value="fa-youtube">YouTube</option>
-                <option value="fa-reddit">Reddit</option>
-                <option value="fa-square">Square</option>
-                <option value="fa-discord">Discord</option>
-            </select>
-            <button id="insertIcon" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Insérer Icône</button>
-            <textarea id="iconOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+            <label class="block mb-2">Sélectionner une icône FontAwesome :</label>
+            <button class="icon-button" onclick="insertIcon('fa-cog')"><i class="fas fa-cog"></i> Cog</button>
+            <button class="icon-button" onclick="insertIcon('fa-info')"><i class="fas fa-info"></i> Info</button>
+            <button class="icon-button" onclick="insertIcon('fa-warning')"><i class="fas fa-exclamation-triangle"></i> Warning</button>
+            <button class="icon-button" onclick="insertIcon('fa-discord')"><i class="fab fa-discord"></i> Discord</button>
+            <button class="icon-button" onclick="insertIcon('fa-reddit')"><i class="fab fa-reddit"></i> Reddit</button>
+            <button class="icon-button" onclick="insertIcon('fa-youtube')"><i class="fab fa-youtube"></i> YouTube</button>
+            <button class="icon-button" onclick="insertIcon('fa-facebook')"><i class="fab fa-facebook"></i> Facebook</button>
         </div>
     </div>
-    
+
     <script>
-        // Mode sombre/clair
-        const body = document.getElementById('body');
-        const converterContainer = document.getElementById('converterContainer');
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            if (body.classList.contains('bg-gray-900')) {
-                body.classList.replace('bg-gray-900', 'bg-white');
-                body.classList.replace('text-white', 'text-gray-900');
-                converterContainer.classList.replace('bg-blue-900', 'bg-blue-100');
-                this.textContent = '☀️';
+        // Fonction pour activer/désactiver le mode sombre/clair
+        document.getElementById('modeSwitch').addEventListener('click', function() {
+            document.body.classList.toggle('darkmode');
+            document.body.classList.toggle('lightmode');
+            
+            let icon = document.getElementById('modeIcon');
+            if (document.body.classList.contains('darkmode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
             } else {
-                body.classList.replace('bg-white', 'bg-gray-900');
-                body.classList.replace('text-gray-900', 'text-white');
-                converterContainer.classList.replace('bg-blue-100', 'bg-blue-900');
-                this.textContent = '🌙';
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
             }
         });
-        
-        // Convertisseur YouTube
-        document.getElementById('generateYoutubeTag').addEventListener('click', function() {
-            const id = document.getElementById('youtubeId').value;
-            document.getElementById('youtubeTagOutput').value = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        });
-        
-        // Convertisseur Image
-        document.getElementById('generateImageTag').addEventListener('click', function() {
-            const url = document.getElementById('imageUrl').value;
-            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
-        });
-        
-        // Convertisseur Lien
-        document.getElementById('generateLinkTag').addEventListener('click', function() {
-            const text = document.getElementById('linkText').value;
-            const url = document.getElementById('linkUrl').value;
-            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
-        });
-        
-        // Editeur de Texte Riche
-        tinymce.init({
-            selector: '#textEditor',
-            menubar: false,
-            toolbar: 'undo redo | bold italic underline | forecolor backcolor | fontsize | removeformat',
-            plugins: 'textcolor',
-            skin: 'oxide-dark',
-            content_css: 'dark'
+
+        // Générateur YouTube
+        document.getElementById('generateYoutubeTag').addEventListener('click', function () {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            let videoId = "";
+
+            try {
+                const parsedUrl = new URL(url);
+
+                // Shorts
+                if (parsedUrl.hostname.includes("youtube.com") && parsedUrl.pathname.startsWith("/shorts/")) {
+                    videoId = parsedUrl.pathname.split("/shorts/")[1].split(/[?&]/)[0];
+                    document.getElementById('youtubeTagOutput').value =
+                        `{GENERICO:type="youtube",width="152",height="280",id="${videoId}"}`;
+                }
+
+                // Vidéo classique
+                else if (parsedUrl.hostname.includes("youtube.com") && parsedUrl.searchParams.has("v")) {
+                    videoId = parsedUrl.searchParams.get("v");
+                    document.getElementById('youtubeTagOutput').value =
+                        `{GENERICO:type="youtube",width="280",height="152",id="${videoId}"}`;
+                }
+
+                // Lien raccourci youtu.be
+                else if (parsedUrl.hostname === "youtu.be") {
+                    videoId = parsedUrl.pathname.replace("/", "").split(/[?&]/)[0];
+                    document.getElementById('youtubeTagOutput').value =
+                        `{GENERICO:type="youtube",width="280",height="152",id="${videoId}"}`;
+                }
+
+                // Sinon, non reconnu
+                else {
+                    document.getElementById('youtubeTagOutput').value = "Lien YouTube non reconnu.";
+                }
+            } catch (e) {
+                document.getElementById('youtubeTagOutput').value = "Lien invalide.";
+            }
         });
 
-        document.getElementById('generateHtmlTag').addEventListener('click', function() {
-            const content = tinymce.get('textEditor').getContent();
-            document.getElementById('htmlTagOutput').value = content;
-        });
-
-        // Sélection et insertion d'icônes FontAwesome
-        document.getElementById('insertIcon').addEventListener('click', function() {
-            const selectedIcon = document.getElementById('iconSelect').value;
-            document.getElementById('iconOutput').value = `{GENERICO:type="fontawesome",icon="${selectedIcon}",orientation="fa-rotate-0",size="fa-lg",layout="pull-left"}`;
-        });
+        // Fonction pour insérer une icône FontAwesome
+        function insertIcon(icon) {
+            const outputArea = document.getElementById('youtubeTagOutput');
+            outputArea.value += `{GENERICO:type="fontawesome",icon="${icon}",orientation="fa-rotate-0",size="fa-lg",layout="pull-left"}`;
+        }
     </script>
 </body>
 </html>
