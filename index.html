@@ -3,43 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodle Tools</title>
+    <title>Outils de Balises</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-
-        .container-dark {
-            background-color: #2d3748; /* bleu foncé */
-        }
-        .container-light {
-            background-color: #ebf8ff; /* bleu clair en mode clair */
-        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
-    <div class="absolute top-4 right-4 flex items-center">
-        <!-- Lune / Soleil -->
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded mr-4">
-            <i id="themeIcon" class="fas fa-sun"></i> <!-- Icône soleil initiale -->
-        </button>
+    <div class="absolute top-4 right-4">
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌙</button>
     </div>
     
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn container-dark" id="container">
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools</h2>
-        
-        <!-- Section YouTube Video Converter -->
-        <div class="mb-6">
-            <label class="block mb-2">Entrez l'URL d'une vidéo YouTube :</label>
-            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://youtube.com/video-id">
-            <button id="generateYouTubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
-            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
+    <div class="bg-blue-900 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn" id="converterContainer">
+        <h2 class="text-2xl font-bold mb-4">Convertisseur de Balises</h2>
         
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
@@ -66,64 +48,41 @@
             <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
         
-        <!-- Section Icônes FontAwesome -->
+        <!-- Icônes FontAwesome -->
         <div class="mb-6">
-            <label class="block mb-2">Sélectionner une icône :</label>
-            <select id="fontAwesomeIcon" class="block w-full bg-gray-700 p-2 rounded">
-                <option value="fa-cog">Cog</option>
-                <option value="fa-info-circle">Info</option>
-                <option value="fa-exclamation-triangle">Warning</option>
-                <option value="fa-discord">Discord</option>
-                <option value="fa-reddit">Reddit</option>
-                <option value="fa-youtube">YouTube</option>
-                <option value="fa-square">Square</option>
-                <option value="fa-facebook">Facebook</option>
-            </select>
-            <button id="insertIcon" class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded w-full">Insérer l'icône</button>
+            <label class="block mb-2">Icônes FontAwesome :</label>
+            <input type="text" id="iconInput" class="block w-full bg-gray-700 p-2 rounded" placeholder="Entrez une icône (ex: fa-facebook)">
+            <button id="insertIcon" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Insérer Icône</button>
+            <textarea id="iconOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
     </div>
     
     <script>
-        // Fonction YouTube : extrait l'ID de la vidéo et génère la balise
-        document.getElementById('generateYouTubeTag').addEventListener('click', function() {
-            const url = document.getElementById('youtubeUrl').value;
-            const videoId = url.split('v=')[1]?.split('&')[0];  // Extraire l'ID de la vidéo
-            if (videoId) {
-                document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="280",height="152",id="${videoId}"}`;
-            } else {
-                alert('URL YouTube invalide');
-            }
-        });
-        
-        // Fonction Image
         document.getElementById('generateImageTag').addEventListener('click', function() {
             const url = document.getElementById('imageUrl').value;
             document.getElementById('imageTagOutput').value = `<img src="${url}">`;
         });
         
-        // Fonction Lien
         document.getElementById('generateLinkTag').addEventListener('click', function() {
             const text = document.getElementById('linkText').value;
             const url = document.getElementById('linkUrl').value;
             document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
         });
         
-        // Mode sombre/clair sans emojis
+        // Mode sombre/clair
         const body = document.getElementById('body');
-        const container = document.getElementById('container');
+        const converterContainer = document.getElementById('converterContainer');
         document.getElementById('themeToggle').addEventListener('click', function() {
             if (body.classList.contains('bg-gray-900')) {
                 body.classList.replace('bg-gray-900', 'bg-white');
                 body.classList.replace('text-white', 'text-gray-900');
-                container.classList.replace('container-dark', 'container-light');
-                this.textContent = 'Mode Clair';
-                document.getElementById('themeIcon').classList.replace('fa-sun', 'fa-moon'); // Icône lune en mode clair
+                converterContainer.classList.replace('bg-blue-900', 'bg-blue-100');
+                this.textContent = '☀️';
             } else {
                 body.classList.replace('bg-white', 'bg-gray-900');
                 body.classList.replace('text-gray-900', 'text-white');
-                container.classList.replace('container-light', 'container-dark');
-                this.textContent = 'Mode Sombre';
-                document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun'); // Icône soleil en mode sombre
+                converterContainer.classList.replace('bg-blue-100', 'bg-blue-900');
+                this.textContent = '🌙';
             }
         });
         
@@ -137,11 +96,15 @@
             content_css: 'dark'
         });
 
-        // Fonction pour insérer des icônes FontAwesome dans l'éditeur
+        document.getElementById('generateHtmlTag').addEventListener('click', function() {
+            const content = tinymce.get('textEditor').getContent();
+            document.getElementById('htmlTagOutput').value = content;
+        });
+
+        // Gestion des icônes FontAwesome
         document.getElementById('insertIcon').addEventListener('click', function() {
-            const iconClass = document.getElementById('fontAwesomeIcon').value;
-            const iconHtml = `<i class="fa ${iconClass}"></i>`;
-            tinymce.get('textEditor').execCommand('mceInsertContent', false, iconHtml);
+            const icon = document.getElementById('iconInput').value;
+            document.getElementById('iconOutput').value = `<i class="fa ${icon}"></i>`;
         });
     </script>
 </body>
