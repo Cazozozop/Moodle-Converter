@@ -23,13 +23,24 @@
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
         <h2 class="text-2xl font-bold mb-4">Moodle Tools</h2>
 
-        <!-- Section URL vers Balise Image -->
-        <div class="mb-6">
-            <label class="block mb-2">Entrez l'URL d'une image :</label>
-            <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
-            <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
-            <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-        </div>
+<!-- Section URL vers Balise Image améliorée -->
+<div class="mb-6">
+    <label class="block mb-2">Entrez l'URL d'une image :</label>
+    <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
+    <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
+
+    <div class="mt-4">
+        <button id="openImporter" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded w-full">Importer une image</button>
+        <iframe id="importerFrame" src="" class="w-full mt-2 rounded" style="height: 300px; display: none;"></iframe>
+    </div>
+
+    <label class="block mt-4 mb-2">Collez ici le code HTML de l’image généré par le site :</label>
+    <textarea id="imghostHtmlInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Collez ici le code HTML de imghost"></textarea>
+
+    <button id="convertImghostCode" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Extraire et Générer Balise Image</button>
+    <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+</div>
+
 
         <!-- Section Texte Cliquable -->
         <div class="mb-6">
