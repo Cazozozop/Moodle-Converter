@@ -23,25 +23,25 @@
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
         <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.14</h2>
 
-<!-- Section URL vers Balise Image améliorée -->
+<!-- Imghost Importer -->
 <div class="mb-6">
-    <label class="block mb-2">Entrez l'URL d'une image :</label>
-    <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
-    <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
-
-    <div class="mt-4">
-        <button id="openImporter" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded w-full">Importer une image</button>
-        <iframe id="importerFrame" src="" class="w-full mt-2 rounded" style="height: 300px; display: none;"></iframe>
+    <button id="showImporter" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full">
+        Importer une image
+    </button>
+    
+    <div id="iframeContainer" class="mt-4 hidden">
+        <iframe src="https://imghost.online/en" class="w-full h-96 rounded border-2 border-purple-600"></iframe>
     </div>
 
-    <label class="block mt-4 mb-2">Collez ici le code HTML de l’image généré par le site :</label>
-    <textarea id="imghostHtmlInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Collez ici le code HTML de imghost"></textarea>
+    <label class="block mt-4">Colle ici le code généré par Imghost :</label>
+    <textarea id="imghostInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Colle ici le code HTML complet..."></textarea>
+    
+    <button id="convertImghost" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
+        Générer Balise Image Moodle
+    </button>
 
-    <button id="convertImghostCode" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Extraire et Générer Balise Image</button>
-    <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+    <textarea id="imghostOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
 </div>
-
-
         <!-- Section Texte Cliquable -->
         <div class="mb-6">
             <label class="block mb-2">Texte Cliquable :</label>
@@ -125,5 +125,18 @@
             document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${id}"}`;
         });
     </script>
+<script>
+    document.getElementById('showImporter').addEventListener('click', function () {
+        const iframe = document.getElementById('iframeContainer');
+        iframe.classList.toggle('hidden');
+    });
+
+    document.getElementById('convertImghost').addEventListener('click', function () {
+        const input = document.getElementById('imghostInput').value;
+        const match = input.match(/<img\s+[^>]*src="([^"]+)"/i);
+        const imgUrl = match ? match[1] : '';
+        document.getElementById('imghostOutput').value = imgUrl ? `<img src="${imgUrl}">` : 'Lien introuvable dans le code.';
+    });
+</script>
 </body>
 </html>
