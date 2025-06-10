@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodle Tools v1.14</title>
+    <title>Moodle Tools v1.15</title>
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
@@ -21,27 +21,16 @@
     </div>
     
     <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.14</h2>
+        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.15</h2>
 
-<!-- Imghost Importer -->
-<div class="mb-6">
-    <button id="showImporter" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full">
-        Importer une image
-    </button>
-    
-    <div id="iframeContainer" class="mt-4 hidden">
-        <iframe src="https://imghost.online/en" class="w-full h-96 rounded border-2 border-purple-600"></iframe>
-    </div>
+        <!-- Section URL vers Balise Image -->
+        <div class="mb-6">
+            <label class="block mb-2">Entrez l'URL d'une image :</label>
+            <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
+            <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
+            <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
+        </div>
 
-    <label class="block mt-4">Colle ici le code généré par Imghost :</label>
-    <textarea id="imghostInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Colle ici le code HTML complet..."></textarea>
-    
-    <button id="convertImghost" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
-        Générer Balise Image Moodle
-    </button>
-
-    <textarea id="imghostOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
-</div>
         <!-- Section Texte Cliquable -->
         <div class="mb-6">
             <label class="block mb-2">Texte Cliquable :</label>
@@ -66,7 +55,24 @@
             <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
             <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
+    </div>
 
+    <!-- SECTION IMGHOST -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn mt-6">
+        <h2 class="text-xl font-bold mb-4">Importer une image via Imghost</h2>
+
+        <button id="openImghost" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full">
+            Ouvrir Imghost
+        </button>
+
+        <label class="block mt-4">Colle ici le code HTML généré par Imghost :</label>
+        <textarea id="imghostInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Colle ici le code HTML complet..."></textarea>
+
+        <button id="convertImghost" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
+            Générer Balise Image Moodle
+        </button>
+
+        <textarea id="imghostOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
     </div>
 
     <script>
@@ -124,19 +130,17 @@
             const height = isShort ? '560' : '305';
             document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${id}"}`;
         });
-    </script>
-<script>
-    document.getElementById('showImporter').addEventListener('click', function () {
-        const iframe = document.getElementById('iframeContainer');
-        iframe.classList.toggle('hidden');
-    });
 
-    document.getElementById('convertImghost').addEventListener('click', function () {
-        const input = document.getElementById('imghostInput').value;
-        const match = input.match(/<img\s+[^>]*src="([^"]+)"/i);
-        const imgUrl = match ? match[1] : '';
-        document.getElementById('imghostOutput').value = imgUrl ? `<img src="${imgUrl}">` : 'Lien introuvable dans le code.';
-    });
-</script>
+        document.getElementById('openImghost').addEventListener('click', function () {
+            window.open("https://imghost.online/en", "_blank");
+        });
+
+        document.getElementById('convertImghost').addEventListener('click', function () {
+            const input = document.getElementById('imghostInput').value;
+            const match = input.match(/<img\s+[^>]*src="([^"]+)"/i);
+            const imgUrl = match ? match[1] : '';
+            document.getElementById('imghostOutput').value = imgUrl ? `<img src="${imgUrl}">` : 'Lien introuvable dans le code.';
+        });
+    </script>
 </body>
 </html>
