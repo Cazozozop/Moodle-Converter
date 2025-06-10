@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Moodle Tools v1.16.4</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico" />
+    <title>Moodle Tools v1.16.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
     <style>
@@ -28,11 +32,15 @@
     id="body"
 >
     <div class="absolute top-4 right-4">
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">☾</button>
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">
+            ☾
+        </button>
     </div>
 
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.16.4</h2>
+    <div
+        class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn"
+    >
+        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.16.5</h2>
 
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
@@ -175,10 +183,21 @@
             id="statsContent"
             class="mt-2 hidden bg-gray-800 p-2 rounded shadow max-w-xs"
         >
-            <!-- Ici tu peux mettre n'importe quoi pour stats -->
+            <!-- Statistiques texte -->
             <p>Nombre de visiteurs en ligne : 42</p>
             <p>Total des visites : 1234</p>
             <p>Visites aujourd'hui : 12</p>
+
+            <!-- Compteur visiteurs Free-Counters -->
+            <a href="https://www.free-counters.org/">www.Free-Counters.org</a>
+            <script
+                type="text/javascript"
+                src="https://www.freevisitorcounters.com/auth.php?id=99e9138a20b23dcc95b860c27097d7a66e6f6646"
+            ></script>
+            <script
+                type="text/javascript"
+                src="https://www.freevisitorcounters.com/en/home/counter/1350352/t/0"
+            ></script>
         </div>
     </div>
 
@@ -190,9 +209,7 @@
             .getElementById("generateImageTag")
             .addEventListener("click", function () {
                 const url = document.getElementById("imageUrl").value;
-                document.getElementById(
-                    "imageTagOutput"
-                ).value = `<img src="${url}">`;
+                document.getElementById("imageTagOutput").value = `<img src="${url}">`;
             });
 
         document
@@ -200,9 +217,7 @@
             .addEventListener("click", function () {
                 const text = document.getElementById("linkText").value;
                 const url = document.getElementById("linkUrl").value;
-                document.getElementById(
-                    "linkTagOutput"
-                ).value = `<a href="${url}" target="_blank">${text}</a>`;
+                document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
             });
 
         themeToggle.addEventListener("click", function () {
@@ -236,64 +251,49 @@
         document
             .getElementById("generateYoutubeTag")
             .addEventListener("click", function () {
-                const url = document.getElementById("youtubeUrl").value;
-                let id = "";
-                let isShort = false;
-                if (url.includes("watch?v=")) {
-                    id = url.split("watch?v=")[1].split("&")[0];
-                } else if (url.includes("shorts/")) {
-                    id = url.split("shorts/")[1].split("?")[0];
-                    isShort = true;
-                }
-                if (!id) {
-                    document.getElementById("youtubeTagOutput").value =
-                        "Lien YouTube invalide.";
-                    return;
-                }
-                if (isShort) {
-                    document.getElementById(
-                        "youtubeTagOutput"
-                    ).value = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`;
+                let url = document.getElementById("youtubeUrl").value.trim();
+                let videoId = "";
+                if (url.includes("shorts/")) {
+                    videoId = url.split("shorts/")[1].split(/[?&]/)[0];
+                } else if (url.includes("watch?v=")) {
+                    videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
                 } else {
-                    document.getElementById(
-                        "youtubeTagOutput"
-                    ).value = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`;
+                    videoId = url; // Si seulement l’ID est donné
                 }
+                const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                document.getElementById("youtubeTagOutput").value = embed;
             });
 
-        document.getElementById("openImghost").addEventListener("click", () => {
-            window.open("https://imgbb.com/", "_blank");
-        });
-
+        // Imghost convert
         document
             .getElementById("convertImghost")
-            .addEventListener("click", () => {
-                const html = document.getElementById("imghostInput").value;
-                // Extraction de l'URL de l'image
-                const regex = /<img[^>]+src="([^">]+)"/i;
-                const match = html.match(regex);
+            .addEventListener("click", function () {
+                const htmlCode = document.getElementById("imghostInput").value;
+                const regex = /src="([^"]+)"/i;
+                const match = htmlCode.match(regex);
                 if (match) {
                     const url = match[1];
-                    document.getElementById(
-                        "imghostOutput"
-                    ).value = `<img src="${url}">`;
+                    const result = `<img src="${url}">`;
+                    document.getElementById("imghostOutput").value = result;
                 } else {
                     document.getElementById("imghostOutput").value =
-                        "Code HTML invalide.";
+                        "Aucune URL trouvée dans le code collé.";
                 }
             });
 
-        // Fonctionnalité Statistiques avec mot de passe "sigma"
+        // Stats bouton avec prompt mot de passe "sigma"
         const showStatsBtn = document.getElementById("showStats");
         const statsContent = document.getElementById("statsContent");
 
         showStatsBtn.addEventListener("click", () => {
-            const pass = prompt("Mot de passe pour afficher les statistiques ?");
-            if (pass === "sigma") {
-                statsContent.classList.remove("hidden");
-                alert("Accès autorisé, voici les statistiques.");
+            if (statsContent.classList.contains("hidden")) {
+                const pwd = prompt("Entrez le mot de passe pour voir les statistiques :");
+                if (pwd === "sigma") {
+                    statsContent.classList.remove("hidden");
+                } else {
+                    alert("Mot de passe incorrect.");
+                }
             } else {
-                alert("Mot de passe incorrect !");
                 statsContent.classList.add("hidden");
             }
         });
