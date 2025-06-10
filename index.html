@@ -126,8 +126,8 @@
                 id = url.split('shorts/')[1].split('?')[0];
                 isShort = true;
             }
-            const width = isShort ? '280' : '152';
-            const height = isShort ? '560' : '305';
+            const width = isShort ? '280' : 280';
+            const height = isShort ? '560' : '152';
             document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${id}"}`;
         });
 
