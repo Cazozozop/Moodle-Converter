@@ -141,6 +141,28 @@
             const imgUrl = match ? match[1] : '';
             document.getElementById('imghostOutput').value = imgUrl ? `<img src="${imgUrl}">` : 'Lien introuvable dans le code.';
         });
+<!-- Statistiques secrètes -->
+<div id="stats-container" class="fixed bottom-4 left-4 text-xs text-gray-400">
+    <button id="showStats" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded">
+        Statistiques
+    </button>
+    <div id="statsContent" class="mt-2 hidden">
+        <a href='https://www.free-counters.org/' target="_blank" class="underline">www.Free-Counters.org</a>
+        <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=b69825f0b25e8bd6aec01245298357bd7021147c'></script>
+        <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1350344/t/0"></script>
+    </div>
+</div>
+
+<script>
+    document.getElementById('showStats').addEventListener('click', function () {
+        const password = prompt("Mot de passe requis pour voir les statistiques :");
+        if (password === "sigma") {
+            document.getElementById('statsContent').classList.remove('hidden');
+        } else {
+            alert("Mot de passe incorrect.");
+        }
+    });
+</script>
     </script>
 </body>
 </html>
