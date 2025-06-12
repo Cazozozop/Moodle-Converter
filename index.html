@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Moodle Tools v1.17.2</title>
+    <title>Moodle Tools v1.15.2</title>
     <link
       rel="icon"
       type="image/x-icon"
@@ -40,7 +40,7 @@
     <div
         class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn"
     >
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.17.2</h2>
+        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.15.2</h2>
 
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
@@ -183,17 +183,42 @@
             id="statsContent"
             class="mt-2 hidden bg-gray-800 p-2 rounded shadow max-w-xs"
         >
-            <p>si tu lis ça, t'es sigma ;)</p>
-            <a href="https://www.free-counters.org/"> 🤫🧏🗿</a>
-            <script type="text/javascript" src="https://www.free-counters.org/count/i0rt"></script><br>
-            <a href='https://www.free-counters.org/'>www.Free-Counters.org</a>
-            <script type='text/javascript' src='https://www.whomania.com/ctr?id=b254383469544596e413b7411fc1438342129911'></script>
+            <!-- Statistiques texte -->
+            <p>Nombre de visiteurs en ligne : 42</p>
+            <p>Total des visites : 1234</p>
+            <p>Visites aujourd'hui : 12</p>
+
+            <!-- Compteur visiteurs Free-Counters -->
+            <a href="https://www.free-counters.org/">www.Free-Counters.org</a>
+            <script
+                type="text/javascript"
+                src="https://www.freevisitorcounters.com/auth.php?id=99e9138a20b23dcc95b860c27097d7a66e6f6646"
+            ></script>
+            <script
+                type="text/javascript"
+                src="https://www.freevisitorcounters.com/en/home/counter/1350352/t/0"
+            ></script>
         </div>
     </div>
 
     <script>
         const body = document.getElementById("body");
         const themeToggle = document.getElementById("themeToggle");
+
+        document
+            .getElementById("generateImageTag")
+            .addEventListener("click", function () {
+                const url = document.getElementById("imageUrl").value;
+                document.getElementById("imageTagOutput").value = `<img src="${url}">`;
+            });
+
+        document
+            .getElementById("generateLinkTag")
+            .addEventListener("click", function () {
+                const text = document.getElementById("linkText").value;
+                const url = document.getElementById("linkUrl").value;
+                document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
+            });
 
         themeToggle.addEventListener("click", function () {
             if (body.classList.contains("bg-gray-900")) {
@@ -216,49 +241,47 @@
             content_css: "dark",
         });
 
-        document.getElementById("generateImageTag").addEventListener("click", function () {
-            const url = document.getElementById("imageUrl").value;
-            document.getElementById("imageTagOutput").value = `<img src="${url}">`;
-        });
+        document
+            .getElementById("generateHtmlTag")
+            .addEventListener("click", function () {
+                const content = tinymce.get("textEditor").getContent();
+                document.getElementById("htmlTagOutput").value = content;
+            });
 
-        document.getElementById("generateLinkTag").addEventListener("click", function () {
-            const text = document.getElementById("linkText").value;
-            const url = document.getElementById("linkUrl").value;
-            document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
-        });
+        document
+            .getElementById("generateYoutubeTag")
+            .addEventListener("click", function () {
+                let url = document.getElementById("youtubeUrl").value.trim();
+                let videoId = "";
+                if (url.includes("shorts/")) {
+                    videoId = url.split("shorts/")[1].split(/[?&]/)[0];
+                } else if (url.includes("watch?v=")) {
+                    videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
+                } else {
+                    videoId = url; // Si seulement l’ID est donné
+                }
+                const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                document.getElementById("youtubeTagOutput").value = embed;
+            });
 
-        document.getElementById("generateHtmlTag").addEventListener("click", function () {
-            const content = tinymce.get("textEditor").getContent();
-            document.getElementById("htmlTagOutput").value = content;
-        });
+        // Imghost convert
+        document
+            .getElementById("convertImghost")
+            .addEventListener("click", function () {
+                const htmlCode = document.getElementById("imghostInput").value;
+                const regex = /src="([^"]+)"/i;
+                const match = htmlCode.match(regex);
+                if (match) {
+                    const url = match[1];
+                    const result = `<img src="${url}">`;
+                    document.getElementById("imghostOutput").value = result;
+                } else {
+                    document.getElementById("imghostOutput").value =
+                        "Aucune URL trouvée dans le code collé.";
+                }
+            });
 
-        document.getElementById("generateYoutubeTag").addEventListener("click", function () {
-            let url = document.getElementById("youtubeUrl").value.trim();
-            let videoId = "";
-            if (url.includes("shorts/")) {
-                videoId = url.split("shorts/")[1].split(/[?&]/)[0];
-            } else if (url.includes("watch?v=")) {
-                videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
-            } else {
-                videoId = url; // Si seulement l’ID est donné
-            }
-            const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-            document.getElementById("youtubeTagOutput").value = embed;
-        });
-
-        document.getElementById("convertImghost").addEventListener("click", function () {
-            const htmlCode = document.getElementById("imghostInput").value;
-            const regex = /src="([^\"]+)"/i;
-            const match = htmlCode.match(regex);
-            if (match) {
-                const url = match[1];
-                const result = `<img src="${url}">`;
-                document.getElementById("imghostOutput").value = result;
-            } else {
-                document.getElementById("imghostOutput").value = "Aucune URL trouvée dans le code collé.";
-            }
-        });
-
+        // Stats bouton avec prompt mot de passe "sigma"
         const showStatsBtn = document.getElementById("showStats");
         const statsContent = document.getElementById("statsContent");
 
