@@ -179,35 +179,21 @@
         >
             Statistiques
         </button>
-<div
-    id="statsContent"
-    class="mt-2 hidden bg-gray-800 p-2 rounded shadow max-w-xs"
->
-    <!-- Statistiques texte -->
-    <p>si tu lis ça, t'es sigma ;)</p>
-    <!-- Compteur visiteurs Free-Counters -->
-    <a href="https://www.free-counters.org/"> 🤫🧏🗿</a>
-<script type="text/javascript" src="https://www.free-counters.org/count/i0rt"></script><br>
- <a href='https://www.free-counters.org/'>www.Free-Counters.org</a> <script type='text/javascript' src='https://www.whomania.com/ctr?id=b254383469544596e413b7411fc1438342129911'></script>
+        <div
+            id="statsContent"
+            class="mt-2 hidden bg-gray-800 p-2 rounded shadow max-w-xs"
+        >
+            <p>si tu lis ça, t'es sigma ;)</p>
+            <a href="https://www.free-counters.org/"> 🤫🧏🗿</a>
+            <script type="text/javascript" src="https://www.free-counters.org/count/i0rt"></script><br>
+            <a href='https://www.free-counters.org/'>www.Free-Counters.org</a>
+            <script type='text/javascript' src='https://www.whomania.com/ctr?id=b254383469544596e413b7411fc1438342129911'></script>
+        </div>
+    </div>
 
     <script>
         const body = document.getElementById("body");
         const themeToggle = document.getElementById("themeToggle");
-
-        document
-            .getElementById("generateImageTag")
-            .addEventListener("click", function () {
-                const url = document.getElementById("imageUrl").value;
-                document.getElementById("imageTagOutput").value = `<img src="${url}">`;
-            });
-
-        document
-            .getElementById("generateLinkTag")
-            .addEventListener("click", function () {
-                const text = document.getElementById("linkText").value;
-                const url = document.getElementById("linkUrl").value;
-                document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
-            });
 
         themeToggle.addEventListener("click", function () {
             if (body.classList.contains("bg-gray-900")) {
@@ -230,47 +216,49 @@
             content_css: "dark",
         });
 
-        document
-            .getElementById("generateHtmlTag")
-            .addEventListener("click", function () {
-                const content = tinymce.get("textEditor").getContent();
-                document.getElementById("htmlTagOutput").value = content;
-            });
+        document.getElementById("generateImageTag").addEventListener("click", function () {
+            const url = document.getElementById("imageUrl").value;
+            document.getElementById("imageTagOutput").value = `<img src="${url}">`;
+        });
 
-        document
-            .getElementById("generateYoutubeTag")
-            .addEventListener("click", function () {
-                let url = document.getElementById("youtubeUrl").value.trim();
-                let videoId = "";
-                if (url.includes("shorts/")) {
-                    videoId = url.split("shorts/")[1].split(/[?&]/)[0];
-                } else if (url.includes("watch?v=")) {
-                    videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
-                } else {
-                    videoId = url; // Si seulement l’ID est donné
-                }
-                const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-                document.getElementById("youtubeTagOutput").value = embed;
-            });
+        document.getElementById("generateLinkTag").addEventListener("click", function () {
+            const text = document.getElementById("linkText").value;
+            const url = document.getElementById("linkUrl").value;
+            document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
+        });
 
-        // Imghost convert
-        document
-            .getElementById("convertImghost")
-            .addEventListener("click", function () {
-                const htmlCode = document.getElementById("imghostInput").value;
-                const regex = /src="([^"]+)"/i;
-                const match = htmlCode.match(regex);
-                if (match) {
-                    const url = match[1];
-                    const result = `<img src="${url}">`;
-                    document.getElementById("imghostOutput").value = result;
-                } else {
-                    document.getElementById("imghostOutput").value =
-                        "Aucune URL trouvée dans le code collé.";
-                }
-            });
+        document.getElementById("generateHtmlTag").addEventListener("click", function () {
+            const content = tinymce.get("textEditor").getContent();
+            document.getElementById("htmlTagOutput").value = content;
+        });
 
-        // Stats bouton avec prompt mot de passe "sigma"
+        document.getElementById("generateYoutubeTag").addEventListener("click", function () {
+            let url = document.getElementById("youtubeUrl").value.trim();
+            let videoId = "";
+            if (url.includes("shorts/")) {
+                videoId = url.split("shorts/")[1].split(/[?&]/)[0];
+            } else if (url.includes("watch?v=")) {
+                videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
+            } else {
+                videoId = url; // Si seulement l’ID est donné
+            }
+            const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            document.getElementById("youtubeTagOutput").value = embed;
+        });
+
+        document.getElementById("convertImghost").addEventListener("click", function () {
+            const htmlCode = document.getElementById("imghostInput").value;
+            const regex = /src="([^\"]+)"/i;
+            const match = htmlCode.match(regex);
+            if (match) {
+                const url = match[1];
+                const result = `<img src="${url}">`;
+                document.getElementById("imghostOutput").value = result;
+            } else {
+                document.getElementById("imghostOutput").value = "Aucune URL trouvée dans le code collé.";
+            }
+        });
+
         const showStatsBtn = document.getElementById("showStats");
         const statsContent = document.getElementById("statsContent");
 
