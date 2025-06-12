@@ -1,301 +1,145 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Moodle Tools v1.15.2</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico"
-    />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodle Tools v1.17.4</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cazozozop/Moodle-Converter/refs/heads/main/IMG_8179.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.7.0/tinymce.min.js"></script>
     <style>
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fadeIn {
-            animation: fadeIn 0.75s ease-out;
-        }
+        .animate-fadeIn { animation: fadeIn 0.75s ease-out; }
     </style>
 </head>
-<body
-    class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300"
-    id="body"
->
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen transition-colors duration-300" id="body">
     <div class="absolute top-4 right-4">
-        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">
-            ☾
-        </button>
+        <button id="themeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">☾</button>
     </div>
-
-    <div
-        class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn"
-    >
-        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.15.2</h2>
+    
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn">
+        <h2 class="text-2xl font-bold mb-4">Moodle Tools v1.17.4</h2>
 
         <!-- Section URL vers Balise Image -->
         <div class="mb-6">
             <label class="block mb-2">Entrez l'URL d'une image :</label>
-            <input
-                type="text"
-                id="imageUrl"
-                class="block w-full bg-gray-700 p-2 rounded"
-                placeholder="https://example.com/image.jpg"
-            />
-            <button
-                id="generateImageTag"
-                class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full"
-            >
-                Générer Balise Image
-            </button>
-            <textarea
-                id="imageTagOutput"
-                class="w-full mt-2 bg-gray-700 p-2 rounded"
-                readonly
-            ></textarea>
+            <input type="text" id="imageUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://example.com/image.jpg">
+            <button id="generateImageTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Image</button>
+            <textarea id="imageTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
 
         <!-- Section Texte Cliquable -->
         <div class="mb-6">
             <label class="block mb-2">Texte Cliquable :</label>
-            <input
-                type="text"
-                id="linkText"
-                class="block w-full bg-gray-700 p-2 rounded"
-                placeholder="Texte affiché"
-            />
-            <input
-                type="text"
-                id="linkUrl"
-                class="block w-full bg-gray-700 p-2 rounded mt-2"
-                placeholder="https://example.com"
-            />
-            <button
-                id="generateLinkTag"
-                class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full"
-            >
-                Générer Balise Lien
-            </button>
-            <textarea
-                id="linkTagOutput"
-                class="w-full mt-2 bg-gray-700 p-2 rounded"
-                readonly
-            ></textarea>
+            <input type="text" id="linkText" class="block w-full bg-gray-700 p-2 rounded" placeholder="Texte affiché">
+            <input type="text" id="linkUrl" class="block w-full bg-gray-700 p-2 rounded mt-2" placeholder="https://example.com">
+            <button id="generateLinkTag" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">Générer Balise Lien</button>
+            <textarea id="linkTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
 
         <!-- Editeur de Texte Riche -->
         <div class="mb-6">
             <label class="block mb-2">Éditeur de Texte :</label>
             <textarea id="textEditor"></textarea>
-            <button
-                id="generateHtmlTag"
-                class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full"
-            >
-                Générer Code HTML
-            </button>
-            <textarea
-                id="htmlTagOutput"
-                class="w-full mt-2 bg-gray-700 p-2 rounded"
-                readonly
-            ></textarea>
+            <button id="generateHtmlTag" class="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full">Générer Code HTML</button>
+            <textarea id="htmlTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
 
         <!-- Section YouTube -->
         <div class="mb-6">
             <label class="block mb-2">Lien YouTube :</label>
-            <input
-                type="text"
-                id="youtubeUrl"
-                class="block w-full bg-gray-700 p-2 rounded"
-                placeholder="https://youtube.com/watch?v=... ou https://youtube.com/shorts/..."
-            />
-            <button
-                id="generateYoutubeTag"
-                class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full"
-            >
-                Générer Balise YouTube
-            </button>
-            <textarea
-                id="youtubeTagOutput"
-                class="w-full mt-2 bg-gray-700 p-2 rounded"
-                readonly
-            ></textarea>
+            <input type="text" id="youtubeUrl" class="block w-full bg-gray-700 p-2 rounded" placeholder="https://youtube.com/watch?v=... ou https://youtube.com/shorts/...">
+            <button id="generateYoutubeTag" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full">Générer Balise YouTube</button>
+            <textarea id="youtubeTagOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
         </div>
     </div>
 
     <!-- SECTION IMGHOST -->
-    <div
-        class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn mt-6"
-    >
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full animate-fadeIn mt-6">
         <h2 class="text-xl font-bold mb-4">Importer une image via Imghost</h2>
 
-        <button
-            id="openImghost"
-            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full"
-        >
+        <button id="openImghost" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded w-full">
             Ouvrir Imghost
         </button>
 
-        <label class="block mt-4"
-            >Colle ici le code HTML généré par Imghost :</label
-        >
-        <textarea
-            id="imghostInput"
-            class="w-full bg-gray-700 p-2 rounded"
-            placeholder="Colle ici le code HTML complet..."
-        ></textarea>
+        <label class="block mt-4">Colle ici le code HTML généré par Imghost :</label>
+        <textarea id="imghostInput" class="w-full bg-gray-700 p-2 rounded" placeholder="Colle ici le code HTML complet..."></textarea>
 
-        <button
-            id="convertImghost"
-            class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full"
-        >
+        <button id="convertImghost" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
             Générer Balise Image Moodle
         </button>
 
-        <textarea
-            id="imghostOutput"
-            class="w-full mt-2 bg-gray-700 p-2 rounded"
-            readonly
-        ></textarea>
-    </div>
-
-    <!-- Bouton Statistiques secret en bas à gauche -->
-    <div
-        id="stats-container"
-        class="fixed bottom-4 left-4 text-xs text-gray-400 select-none"
-    >
-        <button
-            id="showStats"
-            class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded"
-        >
-            Statistiques
-        </button>
-        <div
-            id="statsContent"
-            class="mt-2 hidden bg-gray-800 p-2 rounded shadow max-w-xs"
-        >
-            <!-- Statistiques texte -->
-            <p>Nombre de visiteurs en ligne : 42</p>
-            <p>Total des visites : 1234</p>
-            <p>Visites aujourd'hui : 12</p>
-
-            <!-- Compteur visiteurs Free-Counters -->
-            <a href="https://www.free-counters.org/">www.Free-Counters.org</a>
-            <script
-                type="text/javascript"
-                src="https://www.freevisitorcounters.com/auth.php?id=99e9138a20b23dcc95b860c27097d7a66e6f6646"
-            ></script>
-            <script
-                type="text/javascript"
-                src="https://www.freevisitorcounters.com/en/home/counter/1350352/t/0"
-            ></script>
-        </div>
+        <textarea id="imghostOutput" class="w-full mt-2 bg-gray-700 p-2 rounded" readonly></textarea>
     </div>
 
     <script>
-        const body = document.getElementById("body");
-        const themeToggle = document.getElementById("themeToggle");
+        const body = document.getElementById('body');
+        const themeToggle = document.getElementById('themeToggle');
 
-        document
-            .getElementById("generateImageTag")
-            .addEventListener("click", function () {
-                const url = document.getElementById("imageUrl").value;
-                document.getElementById("imageTagOutput").value = `<img src="${url}">`;
-            });
+        document.getElementById('generateImageTag').addEventListener('click', function() {
+            const url = document.getElementById('imageUrl').value;
+            document.getElementById('imageTagOutput').value = `<img src="${url}">`;
+        });
 
-        document
-            .getElementById("generateLinkTag")
-            .addEventListener("click", function () {
-                const text = document.getElementById("linkText").value;
-                const url = document.getElementById("linkUrl").value;
-                document.getElementById("linkTagOutput").value = `<a href="${url}" target="_blank">${text}</a>`;
-            });
+        document.getElementById('generateLinkTag').addEventListener('click', function() {
+            const text = document.getElementById('linkText').value;
+            const url = document.getElementById('linkUrl').value;
+            document.getElementById('linkTagOutput').value = `<a href="${url}" target="_blank">${text}</a>`;
+        });
 
-        themeToggle.addEventListener("click", function () {
-            if (body.classList.contains("bg-gray-900")) {
-                body.classList.replace("bg-gray-900", "bg-white");
-                body.classList.replace("text-white", "text-gray-900");
-                this.textContent = "☼";
+        themeToggle.addEventListener('click', function() {
+            if (body.classList.contains('bg-gray-900')) {
+                body.classList.replace('bg-gray-900', 'bg-white');
+                body.classList.replace('text-white', 'text-gray-900');
+                this.textContent = '☼';
             } else {
-                body.classList.replace("bg-white", "bg-gray-900");
-                body.classList.replace("text-gray-900", "text-white");
-                this.textContent = "☾";
+                body.classList.replace('bg-white', 'bg-gray-900');
+                body.classList.replace('text-gray-900', 'text-white');
+                this.textContent = '☾';
             }
         });
 
         tinymce.init({
-            selector: "#textEditor",
+            selector: '#textEditor',
             menubar: false,
-            toolbar: "undo redo | bold italic underline | forecolor backcolor | fontsizeselect | removeformat",
-            plugins: "lists",
-            skin: "oxide-dark",
-            content_css: "dark",
+            toolbar: 'undo redo | bold italic underline | forecolor backcolor | fontsizeselect | removeformat',
+            plugins: 'lists',
+            skin: 'oxide-dark',
+            content_css: 'dark'
         });
 
-        document
-            .getElementById("generateHtmlTag")
-            .addEventListener("click", function () {
-                const content = tinymce.get("textEditor").getContent();
-                document.getElementById("htmlTagOutput").value = content;
-            });
+        document.getElementById('generateHtmlTag').addEventListener('click', function() {
+            const content = tinymce.get('textEditor').getContent();
+            document.getElementById('htmlTagOutput').value = content;
+        });
 
-        document
-            .getElementById("generateYoutubeTag")
-            .addEventListener("click", function () {
-                let url = document.getElementById("youtubeUrl").value.trim();
-                let videoId = "";
-                if (url.includes("shorts/")) {
-                    videoId = url.split("shorts/")[1].split(/[?&]/)[0];
-                } else if (url.includes("watch?v=")) {
-                    videoId = url.split("watch?v=")[1].split(/[?&]/)[0];
-                } else {
-                    videoId = url; // Si seulement l’ID est donné
-                }
-                const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-                document.getElementById("youtubeTagOutput").value = embed;
-            });
-
-        // Imghost convert
-        document
-            .getElementById("convertImghost")
-            .addEventListener("click", function () {
-                const htmlCode = document.getElementById("imghostInput").value;
-                const regex = /src="([^"]+)"/i;
-                const match = htmlCode.match(regex);
-                if (match) {
-                    const url = match[1];
-                    const result = `<img src="${url}">`;
-                    document.getElementById("imghostOutput").value = result;
-                } else {
-                    document.getElementById("imghostOutput").value =
-                        "Aucune URL trouvée dans le code collé.";
-                }
-            });
-
-        // Stats bouton avec prompt mot de passe "sigma"
-        const showStatsBtn = document.getElementById("showStats");
-        const statsContent = document.getElementById("statsContent");
-
-        showStatsBtn.addEventListener("click", () => {
-            if (statsContent.classList.contains("hidden")) {
-                const pwd = prompt("Entrez le mot de passe pour voir les statistiques :");
-                if (pwd === "sigma") {
-                    statsContent.classList.remove("hidden");
-                } else {
-                    alert("Mot de passe incorrect.");
-                }
-            } else {
-                statsContent.classList.add("hidden");
+        document.getElementById('generateYoutubeTag').addEventListener('click', function() {
+            const url = document.getElementById('youtubeUrl').value;
+            let id = '';
+            let isShort = false;
+            if (url.includes('watch?v=')) {
+                id = url.split('watch?v=')[1].split('&')[0];
+            } else if (url.includes('shorts/')) {
+                id = url.split('shorts/')[1].split('?')[0];
+                isShort = true;
             }
+            const width = isShort ? '280' : '280';
+            const height = isShort ? '560' : '152';
+            document.getElementById('youtubeTagOutput').value = `{GENERICO:type="youtube",width="${width}",height="${height}",id="${id}"}`;
+        });
+
+        document.getElementById('openImghost').addEventListener('click', function () {
+            window.open("https://imghost.online/en", "_blank");
+        });
+
+        document.getElementById('convertImghost').addEventListener('click', function () {
+            const input = document.getElementById('imghostInput').value;
+            const match = input.match(/<img\s+[^>]*src="([^"]+)"/i);
+            const imgUrl = match ? match[1] : '';
+            document.getElementById('imghostOutput').value = imgUrl ? `<img src="${imgUrl}">` : 'Lien introuvable dans le code.';
         });
     </script>
 </body>
